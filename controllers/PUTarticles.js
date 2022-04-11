@@ -30,15 +30,15 @@ router.put("/articles/:slug", requireLogin, async (req, res) => {
 
     console.log(title, description, body)
 
-    const filter = {"slug": slug }
+    const filter = { "slug": slug }
     let newSlug = slugTitle(title);
 
-    Article.findOneAndUpdate(filter, {$set: {title, description, body, slug: newSlug, updatedAt: Date.now()}}, {new: true}, (err, doc) => {
+    Article.findOneAndUpdate(filter, { $set: { title, description, body, slug: newSlug, updatedAt: Date.now() } }, { new: true }, (err, doc) => {
         if (err) {
             console.log("Something wrong when updating data!");
         }
     })
-  })
+})
 
 
 exports.router = router;

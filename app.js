@@ -47,10 +47,10 @@ app.use("/api", GETslugRouter);
 app.use("/api", POSTuserRouter);
 app.use("/api", POSTloginRouter);
 app.use("/api", POSTarticlesRouter);
-app.use("/api", POSTfavoriteRouter);
 app.use("/api", PUTuserRouter);
-app.use("/api", DELETEfavoriteRouter);
 app.use("/api", PUTarticlesRouter);
+app.use("/api", DELETEfavoriteRouter);
+app.use("/api", POSTfavoriteRouter);
 
 mongoose.connect("mongodb://localhost/backend2_GroupProject");
 
