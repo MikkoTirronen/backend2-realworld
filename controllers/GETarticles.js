@@ -15,7 +15,7 @@ const requireLogin = (req, res, next) => {
 router.get("/articles", async (req, res) => {
 
     let queryParameters = {};
-    //console.log(req.query);
+
     if (req.query.tag !== undefined) {
         queryParameters = { tagList: req.query.tag }
     }
@@ -35,6 +35,7 @@ router.get("/articles", async (req, res) => {
         .find(queryParameters)
         .sort('-createdAt')
         .populate("author")
+    //console.log(articles)
     res.json({ articles, articlesCount });
 
 });
