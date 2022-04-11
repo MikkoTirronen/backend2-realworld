@@ -14,7 +14,6 @@ const requireLogin = (req, res, next) => {
 router.delete("/articles/:slug/favorite", requireLogin, async (req, res) => {
     console.log("DELETE")
     let favorite = req.params.slug;
-    console.log(favorite)
     await Article.updateOne(
         { slug: favorite },
         {
@@ -22,9 +21,14 @@ router.delete("/articles/:slug/favorite", requireLogin, async (req, res) => {
             $inc: { favoritesCount: -1 },
             favorited: false
         })
-    let article = await Article.find({ slug: favorite })
+    let article = await Article
+        .find({ slug: favorite })
+        .populate("author")
+        .exec()
+
     article = article[0]
     res.json({ article });
+    //console.log(article)
 })
 
 

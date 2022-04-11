@@ -21,11 +21,14 @@ router.post("/articles/:slug/favorite", requireLogin, async (req, res) => {
             $inc: { favoritesCount: 1 },
             favorited: true
         })
-    let article = await Article.find({ slug: favorite })
+    let article = await Article
+        .find({ slug: favorite })
+        .populate("author")
+        .exec()
+
     article = article[0]
     res.json({ article });
-    console.log(article);
-
+    //console.log(article)
 })
 
 

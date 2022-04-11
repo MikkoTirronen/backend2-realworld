@@ -25,9 +25,11 @@ router.get("/articles", async (req, res) => {
     }
     else if (req.query.author !== undefined) {
         const user = await User.findOne({ username: req.query.author })
+        //console.log(user);
         queryParameters = { author: user._id }
     }
     let articlesCount = await Article.find(queryParameters).count();
+
     // await Article.updateMany({ followers: { "$ne": req.user.userId } }, { favorited: false })
     // await Article.updateMany({ followers: req.user.userId }, { favorited: true })
 
