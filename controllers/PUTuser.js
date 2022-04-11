@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcryptjs");
 
 const { User } = require("../models/user");
 
@@ -13,20 +14,27 @@ const requireLogin = (req, res, next) => {
 
 router.put("/user", requireLogin, async (req, res) => {
     const { email, username, image, bio } = req.body.user
-    const { password } = req.body.user
+    let { password } = req.body.user
 
     const user = req.user.userId
     const filter = { _id: `${user}` }
 
+    if (password) {
+        let newPassword = await bcrypt.hash(password, 10);
+        password = newPassword;
+    }
+
     console.log(email, username, password, image, bio)
     console.log(user)
 
-    User.findOneAndUpdate(filter, { $set: { email: email, username: username, password: password, image: image, bio: bio } }, { new: true }, (err, doc) => {
-        if (err) {
-            console.log("Something went wrong when updating data!")
-        }
-        res.redirect("/")
-    })
+    User.findOneAndUpdate(filter,
+        { $set: { email: email, username: username, password: password, image: image, bio: bio } },
+        { new: true }, (err, doc) => {
+            if (err) {
+                console.log("Something went wrong when updating data!")
+            }
+            res.redirect("/")
+        })
 });
 
 exports.router = router;
