@@ -11,7 +11,6 @@ const requireLogin = (req, res, next) => {
     }
 };
 
-
 function slugTitle(title) {
     let slugTitle = "";
     array = title.toLowerCase().split(" ");
@@ -24,13 +23,16 @@ function slugTitle(title) {
     return slugTitle
 };
 
-
 router.put("/articles/:slug", requireLogin, async (req, res) => {
+    // let newSlug = "";
     const { title, description, body, slug } = req.body.article
 
     console.log(title, description, body)
 
     const filter = { "slug": slug }
+    // if (title) {
+    //     newSlug = slugTitle(title);
+    // }
     let newSlug = slugTitle(title);
 
     Article.findOneAndUpdate(filter, { $set: { title, description, body, slug: newSlug, updatedAt: Date.now() } }, { new: true }, (err, doc) => {

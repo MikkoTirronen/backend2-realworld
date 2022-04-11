@@ -16,25 +16,35 @@ router.put("/user", requireLogin, async (req, res) => {
     const { email, username, image, bio } = req.body.user
     let { password } = req.body.user
 
-    const user = req.user.userId
-    const filter = { _id: `${user}` }
-
     if (password) {
         let newPassword = await bcrypt.hash(password, 10);
         password = newPassword;
     }
+    if (email) {
+        console.log("HÄR EMAIL")
+        await User.updateOne({ username: req.user.username }, { email: email })
+    }
+    if (username) {
+        console.log("HÄR USERNAME")
+        await User.updateOne({ username: req.user.username }, { username: username })
+    }
+    if (password) {
+        console.log("HÄR PASSWORD")
+        await User.updateOne({ username: req.user.username }, { password: password })
+    }
+    if (image) {
+        console.log("HÄR IMAGE")
+        await User.updateOne({ username: req.user.username }, { image: image })
+    }
+    if (bio) {
+        console.log("HÄR BIO")
+        await User.updateOne({ username: req.user.username }, { bio: bio })
+    }
 
-    console.log(email, username, password, image, bio)
-    console.log(user)
+    let user = await User.find({ username: req.user.username });
+    user = user[0];
+    res.json({ user });
 
-    User.findOneAndUpdate(filter,
-        { $set: { email: email, username: username, password: password, image: image, bio: bio } },
-        { new: true }, (err, doc) => {
-            if (err) {
-                console.log("Something went wrong when updating data!")
-            }
-            res.redirect("/")
-        })
 });
 
 exports.router = router;
