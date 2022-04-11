@@ -24,22 +24,43 @@ function slugTitle(title) {
 };
 
 router.put("/articles/:slug", requireLogin, async (req, res) => {
-    // let newSlug = "";
-    const { title, description, body, slug } = req.body.article
 
-    console.log(title, description, body)
+    const { title, description, body, tagList } = req.body.article
+    console.log(tagList);
+    if (title) {
+        console.log("HÄR TITLE")
+        let newSlug = slugTitle(title);
+        await Article.updateOne({ username: req.user.username }, { title: title, slug: newSlug })
+    }
+    if (body) {
+        console.log("HÄR BODY")
+        await Article.updateOne({ username: req.user.username }, { body: body })
+    }
+    if (description) {
+        console.log("HÄR DESCRIPTION")
+        await Article.updateOne({ username: req.user.username }, { description: description })
+    }
 
-    const filter = { "slug": slug }
-    // if (title) {
-    //     newSlug = slugTitle(title);
-    // }
-    let newSlug = slugTitle(title);
+    updatedAt = Date.now()
+    await Article.updateOne({ username: req.user.username }, { updatedAt: updatedAt })
 
-    Article.findOneAndUpdate(filter, { $set: { title, description, body, slug: newSlug, updatedAt: Date.now() } }, { new: true }, (err, doc) => {
-        if (err) {
-            console.log("Something wrong when updating data!");
-        }
-    })
+    let article = await Article
+        .find({ updatedAt: updatedAt })
+        .populate("author")
+        .exec()
+
+    article = article[0]
+    res.json({ article })
+
+
+
+    // let newSlug = slugTitle(title);
+
+    // Article.findOneAndUpdate(filter, { $set: { title, description, body, slug: newSlug, updatedAt: Date.now() } }, { new: true }, (err, doc) => {
+    //     if (err) {
+    //         console.log("Something wrong when updating data!");
+    //     }
+    // })
 })
 
 
