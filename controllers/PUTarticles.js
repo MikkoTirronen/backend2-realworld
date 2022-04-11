@@ -54,6 +54,7 @@ router.put("/articles/:slug", requireLogin, async (req, res) => {
 
     article = article[0]
     res.json({ article })
+    //console.log(article)
 
 })
 
