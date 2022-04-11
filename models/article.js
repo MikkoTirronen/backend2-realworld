@@ -11,7 +11,8 @@ const articleSchema = new mongoose.Schema(
         updatedAt: { type: Date, default: Date.now },
         favorited: { type: Boolean, default: false },
         favoritesCount: { type: Number, default: 0 },
-        author: { type: mongoose.Schema.ObjectId, ref: "User" }
+        author: { type: mongoose.Schema.ObjectId, ref: "User" },
+        followers: [{ type: mongoose.Schema.ObjectId, ref: "User" }]
     })
 
 const Article = mongoose.model("Article", articleSchema);

@@ -4,18 +4,33 @@ const router = express.Router();
 const { Article } = require("../models/article");
 const { User } = require("../models/user");
 
-router.get("/articles", async (req, res) => {
-    let articlesCount = await Article.find().count();
-    let queryParameters = {};
+const requireLogin = (req, res, next) => {
+    if (req.user) {
+        next()
+    } else {
+        res.sendStatus(401);
+    }
+};
 
+router.get("/articles", async (req, res) => {
+
+    let queryParameters = {};
+    //console.log(req.query);
     if (req.query.tag !== undefined) {
         queryParameters = { tagList: req.query.tag }
     }
+    if (req.query.favorited !== undefined) {
+        const user = await User.findOne({ username: req.query.favorited })
+        queryParameters = { followers: user._id }
+    }
     else if (req.query.author !== undefined) {
-        // queryParameters = { 'author.username': req.query.author }
         const user = await User.findOne({ username: req.query.author })
         queryParameters = { author: user._id }
     }
+    let articlesCount = await Article.find(queryParameters).count();
+    // await Article.updateMany({ followers: { "$ne": req.user.userId } }, { favorited: false })
+    // await Article.updateMany({ followers: req.user.userId }, { favorited: true })
+
     let articles = await Article
         .find(queryParameters)
         .sort('-createdAt')

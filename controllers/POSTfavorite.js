@@ -14,18 +14,18 @@ const requireLogin = (req, res, next) => {
 router.post("/articles/:slug/favorite", requireLogin, async (req, res) => {
     console.log("FAVORIT")
     let favorite = req.params.slug;
-    console.log(req.user);
-    console.log(favorite);
-    let article = await Article.updateOne({ slug: favorite }, { favorited: true, favoritesCount: +1 })
-    // let article = await Article
-    //     .find({ slug: favorite })
-    //     .sort('-createdAt')
-    //     .populate("author")
-    //     .exec();
-    // article = article[0];
-    //console.log(article)
+    await Article.updateOne(
+        { slug: favorite },
+        {
+            $push: { followers: req.user.userId },
+            $inc: { favoritesCount: 1 },
+            favorited: true
+        })
+    let article = await Article.find({ slug: favorite })
+    article = article[0]
     res.json({ article });
-    // console.log(article)
+    console.log(article);
+
 })
 
 
