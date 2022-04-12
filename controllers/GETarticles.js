@@ -16,16 +16,16 @@ router.get("/articles", async (req, res) => {
 
     let queryParameters = {};
 
-    if (req.query.tag !== undefined) {
+    if (req.query.tag) {
         queryParameters = { tagList: req.query.tag }
     }
-    if (req.query.favorited !== undefined) {
+    if (req.query.favorited) {
         const user = await User.findOne({ username: req.query.favorited })
         queryParameters = { followers: user._id }
     }
-    else if (req.query.author !== undefined) {
+    else if (req.query.author) {
+        console.log(req.query.author)
         const user = await User.findOne({ username: req.query.author })
-        //console.log(user);
         queryParameters = { author: user._id }
     }
     let articlesCount = await Article.find(queryParameters).count();
