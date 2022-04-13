@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const { User } = require("../models/user");
 
-const JWTSECRET = "lsdkjflsdjwerd2342fsdjfytsdas";
+const JWTSECRET = process.env.JWTSECRET;
 
 router.post("/users/login", async (req, res) => {
     const { email, password } = req.body.user;

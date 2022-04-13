@@ -2,12 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
 // const { Comment } = require("./models/comment")
 
 const app = express();
-const PORT = 3000;
-const JWTSECRET = "lsdkjflsdjwerd2342fsdjfytsdas";
+const PORT = process.env.PORT;
+const MONGODB_URL = process.env.MONGODB_URL;
+const JWTSECRET = process.env.JWTSECRET;
 
 const GETprofileRouter = require("./controllers/GETprofile").router;
 const GETuserRouter = require("./controllers/GETuser").router;
@@ -52,7 +55,7 @@ app.use("/api", PUTarticlesRouter);
 app.use("/api", DELETEfavoriteRouter);
 app.use("/api", POSTfavoriteRouter);
 
-mongoose.connect("mongodb://localhost/backend2_GroupProject");
+mongoose.connect(MONGODB_URL);
 
 app.listen(PORT, () => {
   console.log(`Started Express server on port ${PORT}`);
