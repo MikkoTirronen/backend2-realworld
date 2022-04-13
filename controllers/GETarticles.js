@@ -4,18 +4,8 @@ const router = express.Router();
 const { Article } = require("../models/article");
 const { User } = require("../models/user");
 
-// const requireLogin = (req, res, next) => {
-//     if (req.user) {
-//         next()
-//     } else {
-//         res.sendStatus(401);
-//     }
-// };
-
 router.get("/articles", async (req, res) => {
 
-    // let articlesCount = 0;
-    // let articles = [];
     let queryParameters = {};
 
 
